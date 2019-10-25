@@ -32,8 +32,9 @@ public class LocalCache<K, V> {
 
     /**
      * 缓存最大容量，超过这个容量，缓存将进行一次缓存失效处理
+     * 通过map容量 * 0.8计算推断得到，避免扩容操作
      */
-    private Long maxCacheSie = 1000L;
+    private Long maxCacheSie = 800L;
 
     /**
      * 根据key获取缓存值
