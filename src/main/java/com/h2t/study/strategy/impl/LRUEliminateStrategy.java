@@ -1,4 +1,6 @@
-package com.h2t.study;
+package com.h2t.study.strategy.impl;
+
+import com.h2t.study.strategy.EliminateStrategy;
 
 /**
  * LRU缓存淘汰策略
@@ -7,7 +9,7 @@ package com.h2t.study;
  * @version 1.0
  * @Date 2019/10/24 18:27
  */
-public class LRUEliminateProxy implements EliminateProxy {
+public class LRUEliminateStrategy implements EliminateStrategy {
     @Override
     public void eliminate() {
 
