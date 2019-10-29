@@ -1,4 +1,4 @@
-package com.h2t.study.dto;
+package com.h2t.study.entity;
 
 /**
  * 本地缓存value值类型
@@ -7,11 +7,16 @@ package com.h2t.study.dto;
  * @version 1.0
  * @Date 2019/10/24 18:33
  */
-public class BaseCacheValue<T> {
+public class CacheNode<K, V> {
+    /**
+     * 保存的键
+     */
+    private K key;
+
     /**
      * 保存的值
      */
-    private T value;
+    private V value;
 
     /**
      * 保存时间
@@ -23,11 +28,19 @@ public class BaseCacheValue<T> {
      */
     private long expireTime = 0;
 
-    public T getValue() {
+    public K getKey() {
+        return key;
+    }
+
+    public void setKey(K key) {
+        this.key = key;
+    }
+
+    public V getValue() {
         return value;
     }
 
-    public void setValue(T value) {
+    public void setValue(V value) {
         this.value = value;
     }
 

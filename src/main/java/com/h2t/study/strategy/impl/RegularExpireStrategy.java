@@ -1,13 +1,9 @@
 package com.h2t.study.strategy.impl;
 
-import com.h2t.study.dto.BaseCacheValue;
+import com.h2t.study.entity.CacheNode;
 import com.h2t.study.strategy.ExpireStrategy;
 
-import java.util.List;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -41,7 +37,7 @@ public class RegularExpireStrategy<K, V> implements ExpireStrategy<K, V> {
      * @return 过期的值
      */
     @Override
-    public V removeExpireKey(ConcurrentHashMap<K, BaseCacheValue<V>> localCache, K key) {
+    public V removeExpireKey(LinkedHashMap<K, CacheNode<K, V>> localCache, K key) {
         new Timer("remove-expire-key-task").schedule(new TimerTask() {
             @Override
             public void run() {
@@ -51,9 +47,9 @@ public class RegularExpireStrategy<K, V> implements ExpireStrategy<K, V> {
                 Random random = new Random();
 
                 for (int i = 0; i < executeCount; i++) {
-                    K key = keyList.get(random.nextInt(size));
-                    if (localCache.get(key).getExpireTime() - System.currentTimeMillis() < 0) {
-                        localCache.remove(key);
+                    K randomKey = keyList.get(random.nextInt(size));
+                    if (localCache.get(randomKey).getExpireTime() - System.currentTimeMillis() < 0) {
+                        localCache.remove(randomKey);
                     }
 
                     //超时执行退出

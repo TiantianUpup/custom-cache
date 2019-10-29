@@ -1,8 +1,8 @@
 package com.h2t.study.strategy;
 
-import com.h2t.study.dto.BaseCacheValue;
+import com.h2t.study.entity.CacheNode;
 
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.LinkedHashMap;
 
 /**
  * 缓存过期策略
@@ -19,5 +19,5 @@ public interface ExpireStrategy<K, V> {
      * @param key 缓存的键
      * @return 过期的值
      */
-    V removeExpireKey(ConcurrentHashMap<K, BaseCacheValue<V>> localCache, K key);
+    V removeExpireKey(LinkedHashMap<K, CacheNode<K, V>> localCache, K key);
 }

@@ -1,11 +1,11 @@
 package com.h2t.study.strategy.impl;
 
-import com.h2t.study.dto.BaseCacheValue;
+import com.h2t.study.entity.CacheNode;
 import com.h2t.study.strategy.ExpireStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.LinkedHashMap;
 
 /**
  * 懒加载删除过期key-value策略
@@ -25,8 +25,8 @@ public class LazyExpireStrategy<K, V> implements ExpireStrategy<K, V> {
      * @return 过期的值
      */
     @Override
-    public V removeExpireKey(ConcurrentHashMap<K, BaseCacheValue<V>> localCache, K key) {
-        BaseCacheValue<V> baseCacheValue = localCache.get(key);
+    public V removeExpireKey(LinkedHashMap<K, CacheNode<K, V>> localCache, K key) {
+        CacheNode<K, V> baseCacheValue = localCache.get(key);
         //值不存在
         if (baseCacheValue == null) {
             logger.info("key:{}对应的value不存在", key);
