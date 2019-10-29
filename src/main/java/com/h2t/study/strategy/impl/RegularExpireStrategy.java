@@ -2,6 +2,8 @@ package com.h2t.study.strategy.impl;
 
 import com.h2t.study.entity.CacheNode;
 import com.h2t.study.strategy.ExpireStrategy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -14,6 +16,7 @@ import java.util.stream.Collectors;
  * @Date 2019/10/25 16:09
  */
 public class RegularExpireStrategy<K, V> implements ExpireStrategy<K, V> {
+    Logger logger = LoggerFactory.getLogger(getClass());
     /**
      * 定期任务每次执行删除操作的次数
      */
@@ -28,6 +31,31 @@ public class RegularExpireStrategy<K, V> implements ExpireStrategy<K, V> {
      * 定期任务执行的频率
      */
     private long executeRate = 1000 * 60 * 60;
+
+    //get and set
+    public long getExecuteCount() {
+        return executeCount;
+    }
+
+    public void setExecuteCount(long executeCount) {
+        this.executeCount = executeCount;
+    }
+
+    public long getExecuteDuration() {
+        return executeDuration;
+    }
+
+    public void setExecuteDuration(long executeDuration) {
+        this.executeDuration = executeDuration;
+    }
+
+    public long getExecuteRate() {
+        return executeRate;
+    }
+
+    public void setExecuteRate(long executeRate) {
+        this.executeRate = executeRate;
+    }
 
     /**
      * 清空过期Key-Value
@@ -49,6 +77,7 @@ public class RegularExpireStrategy<K, V> implements ExpireStrategy<K, V> {
                 for (int i = 0; i < executeCount; i++) {
                     K randomKey = keyList.get(random.nextInt(size));
                     if (localCache.get(randomKey).getExpireTime() - System.currentTimeMillis() < 0) {
+                        logger.info("key:{}已过期，进行删除key操作", randomKey);
                         localCache.remove(randomKey);
                     }
 

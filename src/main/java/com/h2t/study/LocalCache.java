@@ -70,7 +70,8 @@ public class LocalCache<K, V> {
      * 删除key-value
      */
     public V removeKey(K key) {
-        return localCache.remove(key) != null ? localCache.remove(key).getValue() : null;
+        CacheNode<K, V> cacheNode = localCache.remove(key);
+        return cacheNode != null ? cacheNode.getValue() : null;
     }
 
     /**
