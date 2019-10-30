@@ -44,5 +44,10 @@ public class LocalCacheTest {
                 System.out.println(i + "：" + localCache.getValue(i));
             }
         }
+
+        //删除缓存
+        localCache.removeKey(13);
+        //存入并设置失效时间
+        localCache.putValue(11, 11, 60 * 1000);
     }
 }
