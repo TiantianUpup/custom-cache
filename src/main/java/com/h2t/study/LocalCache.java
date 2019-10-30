@@ -66,7 +66,7 @@ public class LocalCache<K, V> {
      * @param key
      * @return
      */
-    public V getValue(K key) {
+    public synchronized V getValue(K key) {
         return lazyExpireStrategy.removeExpireKey(localCache, key);
     }
 
@@ -77,7 +77,7 @@ public class LocalCache<K, V> {
      * @param value
      * @return
      */
-    public V putValue(K key, V value) {
+    public synchronized V putValue(K key, V value) {
         CacheNode<K, V> cacheNode = new CacheNode<>();
         cacheNode.setKey(key);
         cacheNode.setValue(value);
@@ -94,7 +94,7 @@ public class LocalCache<K, V> {
      * @param expireTime 过期时间 expireTime时间后失效，默认时间单位为毫秒
      * @return
      */
-    public V putValue(K key, V value, long expireTime) {
+    public synchronized V putValue(K key, V value, long expireTime) {
         CacheNode<K, V> cacheNode = new CacheNode<>();
         cacheNode.setKey(key);
         cacheNode.setValue(value);
@@ -110,7 +110,7 @@ public class LocalCache<K, V> {
      * @param key
      * @return
      */
-    public V removeKey(K key) {
+    public synchronized V removeKey(K key) {
         CacheNode<K, V> cacheNode = localCache.remove(key);
         return cacheNode != null ? cacheNode.getValue() : null;
     }
@@ -118,7 +118,7 @@ public class LocalCache<K, V> {
     /**
      * 清空缓存所有内容
      */
-    public void clear() {
+    public synchronized void clear() {
         localCache.clear();
     }
 
@@ -128,7 +128,7 @@ public class LocalCache<K, V> {
      * @param key
      * @param expireTime 过期时间 expireTime时间后失效，默认时间单位为毫秒
      * */
-    public void setExpireKey(K key, long expireTime) {
+    public synchronized void setExpireKey(K key, long expireTime) {
         if (localCache.get(key) != null) {
             localCache.get(key).setExpireTime(System.currentTimeMillis() + expireTime);
         }
