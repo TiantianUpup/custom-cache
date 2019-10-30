@@ -71,8 +71,9 @@ public class RegularExpireStrategy<K, V> implements ExpireStrategy<K, V> {
      */
     @Override
     public V removeExpireKey(LinkedHashMap<K, CacheNode<K, V>> localCache, K key) {
+        logger.info("开启定期清除过期key任务");
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        //定时任务，executeRate分钟之后执行，默认1小时执行一次
+        //定时周期任务，executeRate分钟之后执行，默认1小时执行一次
         executor.scheduleAtFixedRate(new MyTask(localCache), 0, executeRate, TimeUnit.MINUTES);
         return null;
     }
@@ -97,7 +98,7 @@ public class RegularExpireStrategy<K, V> implements ExpireStrategy<K, V> {
             for (int i = 0; i < executeCount; i++) {
                 K randomKey = keyList.get(random.nextInt(size));
                 if (localCache.get(randomKey).getExpireTime() - System.currentTimeMillis() < 0) {
-                    logger.info("key:{}已过期，进行删除key操作", randomKey);
+                    logger.info("key:{}已过期，进行定期删除key操作", randomKey);
                     localCache.remove(randomKey);
                 }
 

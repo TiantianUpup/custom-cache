@@ -133,5 +133,14 @@ public class LocalCache<K, V> {
             localCache.get(key).setExpireTime(System.currentTimeMillis() + expireTime);
         }
     }
+
+    /**
+     * 获取本地缓存的大小
+     *
+     * @return
+     */
+    public synchronized int getLocalCacheSize() {
+        return localCache.size();
+    }
 }
 

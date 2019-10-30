@@ -26,7 +26,7 @@ public class CacheNode<K, V> {
     /**
      * 过期时间，单位为毫秒，默认永久有效
      */
-    private long expireTime = 0;
+    private long expireTime = Long.MAX_VALUE;
 
     public K getKey() {
         return key;

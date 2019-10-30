@@ -38,7 +38,7 @@ public class LazyExpireStrategy<K, V> implements ExpireStrategy<K, V> {
             }
         }
 
-        logger.info("key:{}已过期，进行删除key操作", key);
+        logger.info("key:{}已过期，进行懒删除key操作", key);
         localCache.remove(key);
         return null;
     }
