@@ -33,15 +33,15 @@ public class LocalCache<K, V> {
 
     private ExpireStrategy<K, V> regularExpireStrategy;
 
-    /**
-     * 缓存最大容量，超过这个容量，缓存将进行一次缓存失效处理
-     * 通过map容量 * 0.75计算推断得到，避免扩容操作
-     */
     private int maxCacheSie;
 
-    public LocalCache(int initialCapacity, ExpireStrategy<K, V> expireStrategy) {
-        maxCacheSie = new Double(Math.floor(initialCapacity * DEFAULT_LOAD_FACTOR)).intValue();//向下取整
-        this.localCache = new LinkedHashMap<K, CacheNode<K, V>>(initialCapacity) {
+    public LocalCache(int maxCacheSie, ExpireStrategy<K, V> expireStrategy) {
+        //缓存最大容量为初始化的大小
+        this.maxCacheSie = maxCacheSie;
+        //缓存最大容量 => initialCapacity * DEFAULT_LOAD_FACTOR，避免扩容操作
+        int initialCapacity = (int) Math.ceil(maxCacheSie / DEFAULT_LOAD_FACTOR) + 1;
+        //accessOrder设置为true，根据访问顺序而不是插入顺序
+        this.localCache = new LinkedHashMap<K, CacheNode<K, V>>(initialCapacity, DEFAULT_LOAD_FACTOR, true) {
             @Override
             protected boolean removeEldestEntry(Map.Entry<K, CacheNode<K, V>> eldest) {
                 return size() > maxCacheSie;
