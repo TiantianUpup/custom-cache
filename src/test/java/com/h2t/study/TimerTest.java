@@ -4,7 +4,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * TODO Description
+ * Timer测试类
  *
  * @author hetiantian
  * @version 1.0

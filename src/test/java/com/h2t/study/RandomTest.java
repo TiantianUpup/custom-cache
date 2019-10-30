@@ -3,7 +3,7 @@ package com.h2t.study;
 import java.util.Random;
 
 /**
- * TODO Description
+ * Random测试类
  *
  * @author hetiantian
  * @version 1.0
