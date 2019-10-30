@@ -35,6 +35,12 @@ public class LocalCache<K, V> {
 
     private int maxCacheSie;
 
+    /**
+     * 构造函数
+     *
+     * @param expireStrategy 缓存失效策略实现类，针对的是定期失效缓存，传入null，定期失效缓存类为默认配置值
+     * @param maxCacheSie    缓存最大允许存放的数量，缓存失效策略根据这个值触发
+     */
     public LocalCache(int maxCacheSie, ExpireStrategy<K, V> expireStrategy) {
         //缓存最大容量为初始化的大小
         this.maxCacheSie = maxCacheSie;
@@ -56,6 +62,9 @@ public class LocalCache<K, V> {
 
     /**
      * 根据key获取缓存值
+     *
+     * @param key
+     * @return
      */
     public V getValue(K key) {
         return lazyExpireStrategy.removeExpireKey(localCache, key);
@@ -63,6 +72,10 @@ public class LocalCache<K, V> {
 
     /**
      * 缓存key-value
+     *
+     * @param key
+     * @param value
+     * @return
      */
     public V putValue(K key, V value) {
         CacheNode<K, V> cacheNode = new CacheNode<>();
@@ -74,7 +87,28 @@ public class LocalCache<K, V> {
     }
 
     /**
+     * 缓存key-value，包含过期时间
+     *
+     * @param key
+     * @param value
+     * @param expireTime 过期时间 expireTime时间后失效，默认时间单位为毫秒
+     * @return
+     */
+    public V putValue(K key, V value, long expireTime) {
+        CacheNode<K, V> cacheNode = new CacheNode<>();
+        cacheNode.setKey(key);
+        cacheNode.setValue(value);
+        cacheNode.setGmtCreate(System.currentTimeMillis() + expireTime);
+        localCache.put(key, cacheNode);
+        // 返回添加的值
+        return value;
+    }
+
+    /**
      * 删除key-value
+     *
+     * @param key
+     * @return
      */
     public V removeKey(K key) {
         CacheNode<K, V> cacheNode = localCache.remove(key);
@@ -90,6 +124,9 @@ public class LocalCache<K, V> {
 
     /**
      * 设置某个键的过期时间
+     *
+     * @param key
+     * @param expireTime 过期时间 expireTime时间后失效，默认时间单位为毫秒
      * */
     public void setExpireKey(K key, long expireTime) {
         if (localCache.get(key) != null) {
