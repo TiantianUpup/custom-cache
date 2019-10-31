@@ -33,24 +33,24 @@ public class LocalCache<K, V> {
 
     private ExpireStrategy<K, V> regularExpireStrategy;
 
-    private int maxCacheSie;
+    private int maxCacheSize;
 
     /**
      * 构造函数
      *
      * @param expireStrategy 缓存失效策略实现类，针对的是定期失效缓存，传入null，定期失效缓存类为默认配置值
-     * @param maxCacheSie    缓存最大允许存放的数量，缓存失效策略根据这个值触发
+     * @param maxCacheSize    缓存最大允许存放的数量，缓存失效策略根据这个值触发
      */
-    public LocalCache(int maxCacheSie, ExpireStrategy<K, V> expireStrategy) {
+    public LocalCache(int maxCacheSize, ExpireStrategy<K, V> expireStrategy) {
         //缓存最大容量为初始化的大小
-        this.maxCacheSie = maxCacheSie;
+        this.maxCacheSize = maxCacheSize;
         //缓存最大容量 => initialCapacity * DEFAULT_LOAD_FACTOR，避免扩容操作
-        int initialCapacity = (int) Math.ceil(maxCacheSie / DEFAULT_LOAD_FACTOR) + 1;
+        int initialCapacity = (int) Math.ceil(maxCacheSize / DEFAULT_LOAD_FACTOR) + 1;
         //accessOrder设置为true，根据访问顺序而不是插入顺序
         this.localCache = new LinkedHashMap<K, CacheNode<K, V>>(initialCapacity, DEFAULT_LOAD_FACTOR, true) {
             @Override
             protected boolean removeEldestEntry(Map.Entry<K, CacheNode<K, V>> eldest) {
-                return size() > maxCacheSie;
+                return size() > maxCacheSize;
             }
         };
         this.regularExpireStrategy = (expireStrategy == null ? new RegularExpireStrategy<>() : expireStrategy);
